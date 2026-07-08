@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: shopper-postgres
+    environment:
+      POSTGRES_DB: shopper
+      POSTGRES_USER: shopper
+      POSTGRES_PASSWORD: shopper
+    ports:
+      - "5433:5432"
+    volumes:
+      - shopper-postgres-data:/var/lib/postgresql/data
+
+volumes:
+  shopper-postgres-data:

@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: shopper
+
+  datasource:
+    url: jdbc:postgresql://localhost:5433/shopper
+    username: shopper
+    password: shopper
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+
+  flyway:
+    enabled: true
