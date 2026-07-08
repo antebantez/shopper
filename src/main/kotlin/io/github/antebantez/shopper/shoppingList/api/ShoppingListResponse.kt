@@ -7,13 +7,15 @@ import java.util.UUID
 data class ShoppingListResponse(
     val id: UUID,
     val name: String,
-    val createdAt: Instant
+    val createdAt: Instant,
+    val updatedAt: Instant
 ){
     companion object{
         fun from(shoppingList: ShoppingList) = ShoppingListResponse(
             id = requireNotNull(shoppingList.id),
             name = shoppingList.name,
-            createdAt = shoppingList.createdAt
+            createdAt = shoppingList.createdAt,
+            updatedAt = shoppingList.updatedAt
         )
     }
 }

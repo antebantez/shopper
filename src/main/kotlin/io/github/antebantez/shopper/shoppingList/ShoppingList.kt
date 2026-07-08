@@ -20,7 +20,8 @@ class ShoppingList(
     var name: String,
 
     @Column(nullable = false)
-    val createdAt: Instant = Instant.now()
+    val createdAt: Instant = Instant.now(),
 
-
+    @Column(nullable = true)
+    var updatedAt: Instant = Instant.now(),
     )
