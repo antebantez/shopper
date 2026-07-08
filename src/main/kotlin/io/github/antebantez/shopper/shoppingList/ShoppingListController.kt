@@ -2,6 +2,7 @@ package io.github.antebantez.shopper.shoppingList
 
 import io.github.antebantez.shopper.shoppingList.api.CreateShoppingListRequest
 import io.github.antebantez.shopper.shoppingList.api.ShoppingListResponse
+import jakarta.validation.Valid
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
@@ -18,7 +19,7 @@ class ShoppingListController (private val shoppingListService: ShoppingListServi
             .map(ShoppingListResponse::from)
 
     @PostMapping
-    fun create(@RequestBody request: CreateShoppingListRequest) :
+    fun create(@Valid @RequestBody request: CreateShoppingListRequest) :
             ShoppingListResponse =
         shoppingListService.create(request.name)
             .let(ShoppingListResponse::from)
