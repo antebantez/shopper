@@ -25,10 +25,8 @@ class ShoppingListController (private val shoppingListService: ShoppingListServi
             .map(ShoppingListResponse::from)
 
     @GetMapping("/{id}")
-    fun getById(@PathVariable id: UUID): ResponseEntity<ShoppingListResponse> =
-        shoppingListService.getById(id)
-            ?.let { ResponseEntity.ok(ShoppingListResponse.from(it)) }
-            ?: ResponseEntity.notFound().build()
+    fun getById(@PathVariable id: UUID): ShoppingListResponse =
+        ShoppingListResponse.from(shoppingListService.getById(id))
 
     @PostMapping
     fun create(@Valid @RequestBody request: CreateShoppingListRequest) :
@@ -38,15 +36,13 @@ class ShoppingListController (private val shoppingListService: ShoppingListServi
 
     @PutMapping("/{id}")
     fun update(@PathVariable id: UUID, @Valid @RequestBody request: UpdateShoppingListRequest):
-            ResponseEntity<ShoppingListResponse> =
+            ShoppingListResponse =
         shoppingListService.update(id, request.name)
-            ?.let { ResponseEntity.ok(ShoppingListResponse.from(it)) }
-            ?: ResponseEntity.notFound().build()
+            .let(ShoppingListResponse::from)
 
     @DeleteMapping("/{id}")
-    fun delete(@PathVariable id: UUID): ResponseEntity<Void> =
-        if (shoppingListService.delete(id)){
-            ResponseEntity.noContent().build()
-        }
-    else ResponseEntity.notFound().build()
+    fun delete(@PathVariable id: UUID): ResponseEntity<Void> {
+        shoppingListService.delete(id)
+        return ResponseEntity.noContent().build()
+    }
 }

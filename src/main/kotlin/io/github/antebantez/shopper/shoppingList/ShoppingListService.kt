@@ -1,5 +1,6 @@
 package io.github.antebantez.shopper.shoppingList
 
+import io.github.antebantez.shopper.common.exception.ShoppingListNotFoundException
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import java.time.Instant
@@ -13,17 +14,16 @@ class ShoppingListService(
     fun getAll(): List<ShoppingList> =
         shoppingListRepository.findAll()
 
-    fun getById(id: UUID): ShoppingList? =
-        shoppingListRepository.findById(id).orElse(null)
+    fun getById(id: UUID): ShoppingList =
+        shoppingListRepository.findById(id).orElseThrow{ ShoppingListNotFoundException(id) }
 
     fun create(name: String): ShoppingList {
         val shoppingList = ShoppingList(name = name)
         return shoppingListRepository.save(shoppingList)
     }
 
-    fun update(id: UUID, name: String): ShoppingList? {
-        val shoppingList = shoppingListRepository.findById(id).orElse(null)
-            ?: return null
+    fun update(id: UUID, name: String): ShoppingList {
+        val shoppingList = getById(id)
 
         shoppingList.name = name
         shoppingList.updatedAt = Instant.now()
@@ -31,11 +31,8 @@ class ShoppingListService(
         return shoppingListRepository.save(shoppingList)
     }
 
-    fun delete(id: UUID) : Boolean {
-        val shoppingList = shoppingListRepository.findById(id).orElse(null)
-        ?: return false
-
+    fun delete(id: UUID) {
+        val shoppingList = getById(id)
         shoppingListRepository.delete(shoppingList)
-        return true
     }
 }
