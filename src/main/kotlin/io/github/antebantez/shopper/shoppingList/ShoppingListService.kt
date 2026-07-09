@@ -1,5 +1,6 @@
 package io.github.antebantez.shopper.shoppingList
 
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import java.time.Instant
 import java.util.UUID
@@ -28,5 +29,13 @@ class ShoppingListService(
         shoppingList.updatedAt = Instant.now()
 
         return shoppingListRepository.save(shoppingList)
+    }
+
+    fun delete(id: UUID) : Boolean {
+        val shoppingList = shoppingListRepository.findById(id).orElse(null)
+        ?: return false
+
+        shoppingListRepository.delete(shoppingList)
+        return true
     }
 }

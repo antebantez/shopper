@@ -6,6 +6,7 @@ import io.github.antebantez.shopper.shoppingList.api.UpdateShoppingListRequest
 import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -41,4 +42,11 @@ class ShoppingListController (private val shoppingListService: ShoppingListServi
         shoppingListService.update(id, request.name)
             ?.let { ResponseEntity.ok(ShoppingListResponse.from(it)) }
             ?: ResponseEntity.notFound().build()
+
+    @DeleteMapping("/{id}")
+    fun delete(@PathVariable id: UUID): ResponseEntity<Void> =
+        if (shoppingListService.delete(id)){
+            ResponseEntity.noContent().build()
+        }
+    else ResponseEntity.notFound().build()
 }
