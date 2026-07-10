@@ -15,4 +15,12 @@ class GlobalExceptionHandler {
         ResponseEntity
             .status(HttpStatus.NOT_FOUND)
             .body(ApiErrorResponse(message = exception.message ?: "Shopping list not found"))
+
+    @ExceptionHandler(ProductNotFoundException::class)
+    fun handleProductNotFound(
+        exception: ProductNotFoundException
+    ): ResponseEntity<ApiErrorResponse> =
+        ResponseEntity
+            .status(HttpStatus.NOT_FOUND)
+            .body(ApiErrorResponse(message = exception.message ?: "Product not found"))
 }
