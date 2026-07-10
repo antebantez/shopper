@@ -1,0 +1,49 @@
+package io.github.antebantez.shopper.product
+
+import io.github.antebantez.shopper.product.api.CreateProductRequest
+import io.github.antebantez.shopper.product.api.ProductResponse
+import io.github.antebantez.shopper.product.api.UpdateProductRequest
+import jakarta.validation.Valid
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
+import java.util.UUID
+
+@RestController
+@RequestMapping("/api/products")
+class ProductController(
+    private val productService: ProductService
+) {
+    @GetMapping
+    fun getAll(): List<ProductResponse> =
+        productService.getAll()
+            .map(ProductResponse::from)
+
+    @GetMapping("/{id}")
+    fun getById(@PathVariable id: UUID): ProductResponse =
+        ProductResponse.from(productService.getById(id))
+
+    @PostMapping
+    fun create(@Valid @RequestBody request: CreateProductRequest):
+            ProductResponse =
+        productService.create(request.name)
+            .let(ProductResponse::from)
+
+    @PutMapping("/{id}")
+    fun update(@PathVariable id: UUID, @Valid @RequestBody request: UpdateProductRequest):
+            ProductResponse =
+        productService.update(id, request.name)
+            .let(ProductResponse::from)
+
+    @DeleteMapping("/{id}")
+    fun delete(@PathVariable id: UUID): ResponseEntity<Void> {
+        productService.delete(id)
+        return ResponseEntity.noContent().build()
+    }
+}
